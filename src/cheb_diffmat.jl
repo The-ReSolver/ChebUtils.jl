@@ -74,15 +74,3 @@ function cheb_single_diffmat(Ny::Int, ::Type{T}=Float64) where {T}
 
     return diffmat
 end
-
-# TODO: Re-implement swapping the hierarchy to make more efficient
-"""
-Calculate the first row of a first order Chebyshev differentiation matrix for a
-given number of Chebyshev discretisation points.
-
-U. Ehrenstein, R. Peyret (1989), A Chebyshev collocation method for the Navier-
-Stokes equations with application to double-diffusive convection.
-"""
-function cheb_single_diffmat(Ny::Int, row::Int, ::Type{T}=Float64) where {T}
-    return cheb_single_diffmat(Ny::Int, T)[row, :]
-end
