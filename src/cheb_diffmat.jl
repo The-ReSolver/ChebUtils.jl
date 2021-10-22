@@ -2,16 +2,21 @@
 # functions for a set of Chebyshev polynomials evaluated at the associated
 # Chebyshev-Lobatto points
 
-export cheb_single_diffmat, cheb_double_diffmat
+export chebpts, chebdiff, chebddiff
 
 """
-Calculate the second order Chebyshev differentiation matrix for a given number
-of Chebyshev discretisation points.
-
-U. Ehrenstein, R. Peyret (1989), A Chebyshev collocation method for the Navier-
-Stokes equations with application to double-diffusive convection.
+    Generate a set of Chebyshev points.
 """
-function cheb_double_diffmat(Ny::Int, ::Type{T}=Float64) where {T}
+chebpts(Ny::Int, ::Type{T}=Float64) where {T} = T.(cos.((0:(Ny - 1))π/(Ny - 1)))
+
+"""
+    Calculate the second order Chebyshev differentiation matrix for a given
+    number of Chebyshev discretisation points.
+
+    U. Ehrenstein, R. Peyret (1989), A Chebyshev collocation method for the
+    Navier-Stokes equations with application to double-diffusive convection.
+"""
+function chebddiff(Ny::Int, ::Type{T}=Float64) where {T}
     # initialise matrix
     diffmat = Matrix{T}(undef, Ny, Ny)
 
@@ -43,13 +48,13 @@ function cheb_double_diffmat(Ny::Int, ::Type{T}=Float64) where {T}
 end
 
 """
-Calculate the first order Chebyshev differentiation matrix for a given number
-of Chebyshev discretisation points.
+    Calculate the first order Chebyshev differentiation matrix for a given
+    number of Chebyshev discretisation points.
 
-U. Ehrenstein, R. Peyret (1989), A Chebyshev collocation method for the Navier-
-Stokes equations with application to double-diffusive convection.
+    U. Ehrenstein, R. Peyret (1989), A Chebyshev collocation method for the
+    Navier-Stokes equations with application to double-diffusive convection.
 """
-function cheb_single_diffmat(Ny::Int, ::Type{T}=Float64) where {T}
+function chebdiff(Ny::Int, ::Type{T}=Float64) where {T}
     # initialise matrix
     diffmat = Matrix{T}(undef, Ny, Ny)
 
