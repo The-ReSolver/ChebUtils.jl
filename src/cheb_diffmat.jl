@@ -7,7 +7,7 @@ export chebpts, chebdiff, chebddiff
 """
     Generate a set of Chebyshev points.
 """
-chebpts(Ny::Int, ::Type{T}=Float64) where {T} = -T.(cos.((0:(Ny - 1))π/(Ny - 1)))
+chebpts(Ny::Int, ::Type{T}=Float64) where {T} = T.(cos.((0:(Ny - 1))π/(Ny - 1)))
 
 """
     Calculate the second order Chebyshev differentiation matrix for a given
