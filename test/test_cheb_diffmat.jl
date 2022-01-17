@@ -32,4 +32,11 @@
     @test points[1] == 1.0
     @test points[end] == -1.0
     @test points[rand_ind] == Float64(cos(π*(rand_ind - 1)/(rint - 1)))
+
+    # chebyshev quadrature weights
+    Ny = 16
+    ws = chebws(chebdiff(Ny))
+    y = chebpts(Ny)
+    I = exp(1) - exp(-1)
+    @test abs(sum(ws.*exp.(y)) - I) < 1e-8
 end

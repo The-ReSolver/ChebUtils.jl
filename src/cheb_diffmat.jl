@@ -2,7 +2,7 @@
 # functions for a set of Chebyshev polynomials evaluated at the associated
 # Chebyshev-Lobatto points
 
-export chebpts, chebdiff, chebddiff
+export chebpts, chebdiff, chebddiff, chebws
 
 """
     Generate a set of Chebyshev points.
@@ -79,3 +79,9 @@ function chebdiff(Ny::Int, ::Type{T}=Float64) where {T}
 
     return diffmat
 end
+
+"""
+    Calculate the quadrature weights for a given Chebyshev grid size, based on
+    the Clenshaw-Curtis quadrature method.
+"""
+chebws(Dy::Matrix{T}) where {T} = append!(inv(Dy[1:(end - 1), 1:(end - 1)])[1, :], [0])
