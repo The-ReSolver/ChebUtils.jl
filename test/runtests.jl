@@ -1,11 +1,10 @@
 using ChebUtils
 using Random
-using LinearAlgebra
 using Test
 
 @testset "Points                    " begin
     # generate random integer in range
-    rint = rand(2:64)
+    rint = rand(3:64)
     rand_ind = rand(2:(rint - 1))
 
     # evaluate points
