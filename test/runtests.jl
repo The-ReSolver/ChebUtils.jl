@@ -13,7 +13,7 @@ using Test
     @test size(points) == (rint,)
     @test points[1] == 1.0
     @test points[end] == -1.0
-    @test points[rand_ind] == Float64(cos(π*(rand_ind - 1)/(rint - 1)))
+    @test points[rand_ind] ≈ Float64(cos(π*(rand_ind - 1)/(rint - 1)))
 end
 
 @testset "Differentiation matrices  " begin

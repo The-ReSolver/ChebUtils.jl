@@ -1,6 +1,6 @@
 module ChebUtils
 
-import LinearAlgebra
+using LinearAlgebra
 
 export chebpts, chebdiff, chebddiff, chebws
 
