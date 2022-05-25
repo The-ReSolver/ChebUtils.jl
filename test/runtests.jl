@@ -29,14 +29,14 @@ end
     # generate the second order differential matrix
     double_diffmat_randsize = chebddiff(rint)
 
+    # size check for random size matrices
+    @test size(diffmat_randsize) == (rint, rint)
+    @test size(double_diffmat_randsize) == (rint, rint)
+
     # first order matrices correct
     @test diffmat2 ≈ [0.5 -0.5; 0.5 -0.5]
     @test diffmat3 ≈ [1.5 -2.0 0.5; 0.5 0.0 -0.5; -0.5 2.0 -1.5]
     @test diffmat4 ≈ [19/6 -4.0 4/3 -0.5; 1.0 -1/3 -1.0 1/3; -1/3 1.0 1/3 -1; 0.5 -4/3 4.0 -19/6]
-
-    # size check for random size matrices
-    @test size(diffmat_randsize) == (rint, rint)
-    @test size(double_diffmat_randsize) == (rint, rint)
 
     # second order matrices correct (based off first order)
     @test double_diffmat_randsize ≈ diffmat_randsize*diffmat_randsize
@@ -54,5 +54,5 @@ end
     Ny2 = 3
     y2 = chebpts(Ny2)
     ws2 = chebws(chebdiff(Ny2))
-    @test abs(sum(ws2.*(x->x^3).(y2))) < 1e-16
+    @test abs(sum(ws2.*(x->x^3).(y2))) < 1e-15
 end
