@@ -45,14 +45,14 @@ end
 @testset "Quadrature Weights        " begin
     # non-polynomial function
     Ny1 = 16
-    ws1 = chebws(chebdiff(Ny1))
     y1 = chebpts(Ny1)
+    ws1 = chebws(Ny1)
     I1 = exp(1) - exp(-1)
     @test abs(sum(ws1.*exp.(y1)) - I1) < 1e-8
 
     # polynomial function
     Ny2 = 3
     y2 = chebpts(Ny2)
-    ws2 = chebws(chebdiff(Ny2))
+    ws2 = chebws(Ny2)
     @test abs(sum(ws2.*(x->x^3).(y2))) < 1e-15
 end

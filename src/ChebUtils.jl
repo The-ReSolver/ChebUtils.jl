@@ -79,5 +79,6 @@ end
     the Clenshaw-Curtis quadrature method.
 """
 chebws(Dy::Matrix{T}) where {T} = append!(inv(Dy[1:(end - 1), 1:(end - 1)])[1, :], [0])
+chebws(Ny::Int) = chebws(chebdiff(Ny))
 
 end
