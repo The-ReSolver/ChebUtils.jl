@@ -1,4 +1,5 @@
 using ChebUtils
+using LinearAlgebra
 using Random
 using Test
 
@@ -42,7 +43,7 @@ end
     @test double_diffmat_randsize ≈ diffmat_randsize*diffmat_randsize
 end
 
-@testset "Quadrature Weights        " begin
+@testset "Quadrature weights        " begin
     # non-polynomial function
     Ny1 = 16
     y1 = chebpts(Ny1)
@@ -55,4 +56,56 @@ end
     y2 = chebpts(Ny2)
     ws2 = chebws(Ny2)
     @test abs(sum(ws2.*(x->x^3).(y2))) < 1e-15
+end
+
+@testset "Matmul of vector          " begin
+    # initialise differentiation matrix
+    N = 32
+    y = chebpts(N)
+    D = chebdiff(N); DD = chebddiff(N)
+
+    # generate field to be differentiatied
+    fs_fun(y) = exp(1.1*y)
+    fs = fs_fun.(y)
+
+    # generate exact derivative fields
+    dfs_fun(y) = 1.1*fs_fun(y)
+    ddfs_fun(y) = (1.1^2)*fs_fun(y)
+    dfs_EX = dfs_fun.(y)
+    ddfs_EX = ddfs_fun.(y)
+
+    # compute derivative using matrix
+    dfs_FD = zero(fs)
+    ddfs_FD = zero(fs)
+    mul!(dfs_FD, D, fs)
+    mul!(ddfs_FD, DD, fs)
+
+    @test dfs_FD ≈ dfs_EX
+    @test ddfs_FD ≈ ddfs_EX
+end
+
+@testset "Matmul of cube            " begin
+    # initialise differentiation matrix
+    Ny = 32; Nz = 32; Nt = 32
+    grid = (reshape(chebpts(Ny), :, 1, 1), reshape((0:(Nz - 1))/Nz*2π, 1, :, 1), reshape((0:(Nt - 1))/Nt*2π, 1, 1, :))
+    D = chebdiff(Ny); DD = chebddiff(Ny)
+
+    # generate field to be differentiatied
+    fs_fun(y, z, t) = exp(1.1*y)*exp(cos(z))*atan(sin(t))
+    fs = fs_fun.(grid...)
+
+    # generate exact derivative fields
+    dfs_fun(y, z, t) = 1.1*fs_fun(y, z, t)
+    ddfs_fun(y, z, t) = (1.1^2)*fs_fun(y, z, t)
+    dfs_EX = dfs_fun.(grid...)
+    ddfs_EX = ddfs_fun.(grid...)
+
+    # compute derivative using matrix
+    dfs_FD = zero(fs)
+    ddfs_FD = zero(fs)
+    mul!(dfs_FD, D, fs)
+    mul!(ddfs_FD, DD, fs)
+
+    @test dfs_FD ≈ dfs_EX
+    @test ddfs_FD ≈ ddfs_EX
 end
