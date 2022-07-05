@@ -59,7 +59,7 @@ end
 end
 
 @testset "Matmul of vector          " begin
-    # initialise differentiation matrix
+    # initialise differentiation matrices
     N = 32
     y = chebpts(N)
     D = chebdiff(N); DD = chebddiff(N)
@@ -85,7 +85,7 @@ end
 end
 
 @testset "Matmul of cube            " begin
-    # initialise differentiation matrix
+    # initialise differentiation matrices
     Ny = 32; Nz = 32; Nt = 32
     grid = (reshape(chebpts(Ny), :, 1, 1), reshape((0:(Nz - 1))/Nz*2π, 1, :, 1), reshape((0:(Nt - 1))/Nt*2π, 1, 1, :))
     D = chebdiff(Ny); DD = chebddiff(Ny)
@@ -108,4 +108,31 @@ end
 
     @test dfs_FD ≈ dfs_EX
     @test ddfs_FD ≈ ddfs_EX
+end
+
+@testset "LU decomposition          " begin
+    # initialise differentiation matrices
+    N = 16
+    y = chebpts(N)
+    D = chebdiff(N); DD = chebddiff(N)
+
+    # make them invertible
+    D[1, :] .= 0; D[1, 1] = 1
+    DD[1, :] .= 0; DD[1, 1] = 1
+    DD[end, :] .= 0; DD[end, end] = 1
+
+    # make copy to be compared later
+    Dbase = copy(parent(D)); DDbase = copy(parent(DD))
+
+    # compute LU decomposition
+    D_LU = lu!(D)
+    DD_LU = lu!(DD)
+
+    # check types
+    @test D_LU isa LinearAlgebra.LU
+    @test DD_LU isa LinearAlgebra.LU
+
+    # compare reconstructed values
+    @test D_LU.L * D_LU.U ≈ Dbase[D_LU.p, :]
+    @test DD_LU.L * DD_LU.U ≈ DDbase[DD_LU.p, :]
 end
