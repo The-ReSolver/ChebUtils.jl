@@ -29,7 +29,6 @@ function chebddiff(D::ChebDiff{T}) where {T}
     DD = zero(D)
 
     # define anonymous function for c_k coefficients and x location
-    c = i -> i == 1 || i == size(D)[1] ? 2 : 1
     x = i -> cos(((i - 1)*π)/(size(D)[1] - 1))
 
     # loop over matrix assigning values
