@@ -3,6 +3,15 @@ using LinearAlgebra
 using Random
 using Test
 
+@testset "Constructors              " begin
+    # generate differentiation matrices and add complex part
+    D = chebdiff(4)
+    E = 6im*I + D
+
+    @test D isa ChebUtils.ChebDiff{Float64, 4}
+    @test E isa Matrix{ComplexF64}
+end
+
 @testset "Points                    " begin
     # generate random integer in range
     rint = rand(3:64)

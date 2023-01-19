@@ -43,4 +43,3 @@ function chebddiff(D::ChebDiff{T}) where {T}
     return DD
 end
 chebddiff(N::Int, ::Type{T}=Float64) where {T} = chebddiff(chebdiff(N, T))
-

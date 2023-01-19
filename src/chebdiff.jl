@@ -3,11 +3,11 @@
 struct ChebDiff{T<:Real, N} <: AbstractMatrix{T}
     mat::Matrix{T}
 
-    function ChebDiff(mat::AbstractMatrix, ::Type{T}=Float64) where {T}
-        size(mat, 1) == size(mat, 2) || throw(ArgumentError("Matrix must be square"))
-        new{T, size(mat, 1)}(T.(mat))
-    end
+    ChebDiff(mat) = new{eltype(mat), size(mat, 1)}(mat)
 end
+
+ChebDiff(mat::AbstractMatrix, ::Type{S}) where {S<:Real} = ChebDiff(S.(mat))
+ChebDiff(mat::AbstractMatrix, ::Type{S}) where {S} = Matrix{S}(S.(mat))
 
 Base.size(::ChebDiff{T, N}) where {T, N} = (N, N)
 Base.IndexStyle(::Type{<:ChebDiff}) = Base.IndexLinear()
